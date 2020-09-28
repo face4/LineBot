@@ -1,1 +1,1 @@
-web: java src/main/java/LineBotApplication
+web: java LineBotApplication
