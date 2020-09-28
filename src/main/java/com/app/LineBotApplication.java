@@ -17,9 +17,15 @@ public class LineBotApplication {
     }
 
     @EventMapping
-    public TextMessage tmp(MessageEvent<TextMessageContent> event) {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         return new TextMessage("「" + event.getMessage().getText() + "！」");
+    }
+
+    @EventMapping
+    public TextMessage tmp(MessageEvent<TextMessageContent> event) {
+        System.out.println("event: " + event);
+        return new TextMessage("「" + event.getMessage().getText() + "！！」");
     }
 
     @EventMapping
