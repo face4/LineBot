@@ -1,1 +1,1 @@
-web: java LineBotApplication
+web: java -cp target/classes/:target/dependency/* LineBotApplication
