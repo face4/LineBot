@@ -1,1 +1,1 @@
-web: java -cp target/classes/:target/dependency/* LineBotApplication
+web: java $JAVA_OPTS -jar target/LineBot-1.0.jar --server.port=$PORT
