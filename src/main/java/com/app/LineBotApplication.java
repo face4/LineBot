@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import javax.sql.DataSource;
 import javax.xml.crypto.Data;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,7 +37,20 @@ public class LineBotApplication {
     }
 
     private TextMessage printAll(){
-        return new TextMessage("test.");
+        StringBuilder sb = new StringBuilder();
+        try(Connection connection = dataSource.getConnection()){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM health");
+            while(resultSet.next()){
+                sb.append(resultSet.getString(0) + " " +
+                        resultSet.getString(1) + " " +
+                        resultSet.getString(2) + "\n");
+            }
+            return new TextMessage(sb.toString());
+        }catch(Exception e){
+            System.out.println("ERRORERROR.");
+            return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
+        }
     }
 
     @EventMapping
