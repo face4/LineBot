@@ -5,4 +5,4 @@ line:
 
 spring:
   datasource:
-    url: ${DATABASE_URL}
+    url: ${DATABASE_URL:}
