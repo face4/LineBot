@@ -18,6 +18,7 @@ public class CreateBean {
     public DataSource dataSource() throws SQLException {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dbUrl);
+        System.out.println("!!!!!!!" + dbUrl);
         return new HikariDataSource(config);
     }
 }
