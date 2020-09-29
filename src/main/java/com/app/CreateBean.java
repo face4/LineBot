@@ -16,10 +16,12 @@ public class CreateBean {
 
     @Bean
     public DataSource dataSource() throws SQLException {
-        return new HikariDataSource();
-//        HikariConfig config = new HikariConfig();
-//        config.setJdbcUrl(dbUrl);
-//        System.out.println("!!!!!!!" + dbUrl);
-//        return new HikariDataSource(config);
+        if (dbUrl == null || dbUrl.isEmpty()) {
+            return new HikariDataSource();
+        } else {
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(dbUrl);
+            return new HikariDataSource(config);
+        }
     }
 }
