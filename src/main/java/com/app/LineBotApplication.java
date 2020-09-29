@@ -42,14 +42,17 @@ public class LineBotApplication {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM health");
             while(resultSet.next()){
-                sb.append(resultSet.getString(1) + " " +
-                        resultSet.getString(2) + " " +
-                        resultSet.getString(3) + "\n");
+                sb.append(String.format("%03d\t%03d\t%03d\n",
+                        resultSet.getInt(1),
+                        resultSet.getInt(2),
+                        resultSet.getInt(3)));
             }
-            return new TextMessage(sb.toString());
+            String ret = sb.toString();
+            ret = ret.substring(0, ret.length()-1);
+            return new TextMessage(ret);
         }catch(Exception e){
             System.out.println("ERRORERROR.");
-            return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
+            return new TextMessage("DB error!\n" + e.getMessage());
         }
     }
 
