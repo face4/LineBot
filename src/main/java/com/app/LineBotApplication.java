@@ -35,14 +35,11 @@ public class LineBotApplication {
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         String[] text = event.getMessage().getText().split("\n");
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
-        DataSource dataSource = new HikariDataSource(config);
         try{
             int bsl = Integer.parseInt(text[0]);    // blood sugar level
             int inj = Integer.parseInt(text[1]);    // injection
             int car = Integer.parseInt(text[2]);    // carbohydrate
-            try(Connection connection = dataSource.getConnection()){
+            try(Connection connection = Ds.getInstance().getConnection()){
                 Statement statement = connection.createStatement();
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
                 statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
@@ -58,5 +55,25 @@ public class LineBotApplication {
     @EventMapping
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);
+    }
+}
+
+
+class Ds{
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
+
+    HikariConfig hikariConfig;
+    DataSource dataSource;
+    private static final Ds instance = new Ds();
+
+    private Ds(){
+        hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(dbUrl);
+        dataSource = new HikariDataSource(hikariConfig);
+    }
+
+    public static DataSource getInstance(){
+        return instance.dataSource;
     }
 }
