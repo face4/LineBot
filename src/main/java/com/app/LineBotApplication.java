@@ -41,8 +41,8 @@ public class LineBotApplication {
             int car = Integer.parseInt(text[2]);    // carbohydrate
             try{
                 Connection connection = Ds.getInstance().getConnection();
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
+//                Statement statement = connection.createStatement();
+//                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
 //                statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
             }catch(Exception e){
                 System.out.println("ERRORERROR.");
