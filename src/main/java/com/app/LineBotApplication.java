@@ -61,17 +61,14 @@ public class LineBotApplication {
 
 
 class Ds{
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
-
     HikariConfig hikariConfig;
     DataSource dataSource;
     private static final Ds instance = new Ds();
 
     private Ds(){
         hikariConfig = new HikariConfig();
+        String dbUrl = System.getenv("DATABASE_URL");
         hikariConfig.setJdbcUrl(dbUrl);
-        System.out.println("[!!!" + dbUrl + "!!!]");
         dataSource = new HikariDataSource(hikariConfig);
     }
 
