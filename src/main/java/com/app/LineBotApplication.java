@@ -24,8 +24,8 @@ import java.sql.Statement;
 @SpringBootApplication
 @LineMessageHandler
 public class LineBotApplication {
-    @Value("${spring.datasource.url")
-    private String dbUrl;
+    @Value("${spring.datasource.url}")
+    private static String dbUrl;
 
     public String getDbUrl(){
         return dbUrl;
@@ -65,7 +65,7 @@ public class LineBotApplication {
     }
 
     @Bean
-    public DataSource dataSource() throws SQLException{
+    public static DataSource dataSource() throws SQLException{
         if(dbUrl == null || dbUrl.isEmpty()){
             return new HikariDataSource();
         }else{
