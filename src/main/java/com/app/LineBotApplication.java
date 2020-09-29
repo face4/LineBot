@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
 import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,9 +27,6 @@ public class LineBotApplication {
     @Value("${spring.datasource.url}")
     private String dbUrl;
 
-    @Autowired
-    private DataSource dataSource;
-
     public static void main(String[] args) {
         SpringApplication.run(LineBotApplication.class, args);
     }
@@ -37,6 +35,9 @@ public class LineBotApplication {
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         String[] text = event.getMessage().getText().split("\n");
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(dbUrl);
+        DataSource dataSource = new HikariDataSource(config);
         try{
             int bsl = Integer.parseInt(text[0]);    // blood sugar level
             int inj = Integer.parseInt(text[1]);    // injection
