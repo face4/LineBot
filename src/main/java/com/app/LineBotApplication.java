@@ -39,13 +39,13 @@ public class LineBotApplication {
             int bsl = Integer.parseInt(text[0]);    // blood sugar level
             int inj = Integer.parseInt(text[1]);    // injection
             int car = Integer.parseInt(text[2]);    // carbohydrate
-            try(Connection connection = Ds.getInstance().getConnection()){
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
-                statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
-            }catch(Exception e){
-                return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
-            }
+//            try(Connection connection = Ds.getInstance().getConnection()){
+//                Statement statement = connection.createStatement();
+//                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
+//                statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
+//            }catch(Exception e){
+//                return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
+//            }
         }catch(Exception e){
             return new TextMessage("invalid input!\n" + e.getMessage());
         }
