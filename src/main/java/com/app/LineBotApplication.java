@@ -42,9 +42,9 @@ public class LineBotApplication {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM health");
             while(resultSet.next()){
-                sb.append(resultSet.getString(0) + " " +
-                        resultSet.getString(1) + " " +
-                        resultSet.getString(2) + "\n");
+                sb.append(resultSet.getString(1) + " " +
+                        resultSet.getString(2) + " " +
+                        resultSet.getString(3) + "\n");
             }
             return new TextMessage(sb.toString());
         }catch(Exception e){
