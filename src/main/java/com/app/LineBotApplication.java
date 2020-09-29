@@ -16,11 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 @Controller
 @SpringBootApplication
@@ -32,17 +32,23 @@ public class LineBotApplication {
     @Autowired
     private DataSource dataSource;
 
+    private String datePattern = "MM/dd hh:mm:ss";
+
     public static void main(String[] args) {
         SpringApplication.run(LineBotApplication.class, args);
     }
 
     private TextMessage printAll(){
         StringBuilder sb = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
         try(Connection connection = dataSource.getConnection()){
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM health");
+            int index = 0;
             while(resultSet.next()){
-                sb.append(String.format("%03d\t%03d\t%03d\n",
+                sb.append(String.format("[%d] %s %3d:%3d:%3d\n",
+                        index++,
+                        sdf.format(resultSet.getDate(4)),
                         resultSet.getInt(1),
                         resultSet.getInt(2),
                         resultSet.getInt(3)));
