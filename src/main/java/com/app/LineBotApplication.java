@@ -35,10 +35,17 @@ public class LineBotApplication {
         SpringApplication.run(LineBotApplication.class, args);
     }
 
+    private TextMessage printAll(){
+        return new TextMessage("test.");
+    }
+
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         String[] text = event.getMessage().getText().split("\n");
+        if("out".equals(text[0])){
+            return printAll();
+        }
         try{
             int bsl = Integer.parseInt(text[0]);    // blood sugar level
             int inj = Integer.parseInt(text[1]);    // injection
