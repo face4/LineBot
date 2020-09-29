@@ -71,6 +71,7 @@ class Ds{
     private Ds(){
         hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(dbUrl);
+        System.out.println("[!!!" + dbUrl + "!!!]");
         dataSource = new HikariDataSource(hikariConfig);
     }
 
