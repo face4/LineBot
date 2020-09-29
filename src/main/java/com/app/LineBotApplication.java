@@ -25,11 +25,7 @@ import java.sql.Statement;
 @LineMessageHandler
 public class LineBotApplication {
     @Value("${spring.datasource.url}")
-    private static String dbUrl;
-
-    public String getDbUrl(){
-        return dbUrl;
-    }
+    private String dbUrl;
 
     @Autowired
     private DataSource dataSource;
@@ -51,7 +47,7 @@ public class LineBotApplication {
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
                 statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
             }catch(Exception e){
-                return new TextMessage("DB error!\n" + getDbUrl() + "\n" + e.getMessage());
+                return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
             }
         }catch(Exception e){
             return new TextMessage("invalid input!\n" + e.getMessage());
@@ -65,7 +61,7 @@ public class LineBotApplication {
     }
 
     @Bean
-    public static DataSource dataSource() throws SQLException{
+    public DataSource dataSource() throws SQLException{
         if(dbUrl == null || dbUrl.isEmpty()){
             return new HikariDataSource();
         }else{
