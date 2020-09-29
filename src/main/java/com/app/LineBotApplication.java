@@ -27,6 +27,9 @@ public class LineBotApplication {
     @Value("${spring.datasource.url}")
     private String dbUrl;
 
+    @Autowired
+    private DataSource dataSource;
+
     public static void main(String[] args) {
         SpringApplication.run(LineBotApplication.class, args);
     }
@@ -39,11 +42,10 @@ public class LineBotApplication {
             int bsl = Integer.parseInt(text[0]);    // blood sugar level
             int inj = Integer.parseInt(text[1]);    // injection
             int car = Integer.parseInt(text[2]);    // carbohydrate
-            try{
-                Connection connection = Ds.getInstance().getConnection();
-//                Statement statement = connection.createStatement();
-//                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
-//                statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
+            try(Connection connection = dataSource.getConnection()){
+                Statement statement = connection.createStatement();
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
+                statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
             }catch(Exception e){
                 System.out.println("ERRORERROR.");
                 return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
@@ -58,22 +60,15 @@ public class LineBotApplication {
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);
     }
-}
 
-
-class Ds{
-    HikariConfig hikariConfig;
-    DataSource dataSource;
-    private static final Ds instance = new Ds();
-
-    private Ds(){
-        hikariConfig = new HikariConfig();
-        String dbUrl = System.getenv("DATABASE_URL");
-        hikariConfig.setJdbcUrl(dbUrl);
-        dataSource = new HikariDataSource(hikariConfig);
-    }
-
-    public static DataSource getInstance(){
-        return instance.dataSource;
+    @Bean
+    public DataSource dataSource() throws SQLException {
+        if (dbUrl == null || dbUrl.isEmpty()) {
+            return new HikariDataSource();
+        } else {
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(dbUrl);
+            return new HikariDataSource(config);
+        }
     }
 }
