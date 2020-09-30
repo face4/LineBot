@@ -54,7 +54,11 @@ public class LineBotApplication {
                         resultSet.getInt(3)));
             }
             String ret = sb.toString();
-            ret = ret.substring(0, ret.length()-1);
+            if(ret.isEmpty()){
+                ret = "No Data";
+            }else{
+                ret = ret.substring(0, ret.length()-1);
+            }
             return new TextMessage(ret);
         }catch(Exception e){
             System.out.println("ERRORERROR.");
@@ -75,7 +79,7 @@ public class LineBotApplication {
             int car = Integer.parseInt(text[2]);    // carbohydrate
             try(Connection connection = dataSource.getConnection()){
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date date)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS health (bsl int, inj int, car int, date timestamp)");
                 statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
             }catch(Exception e){
                 System.out.println("ERRORERROR.");
