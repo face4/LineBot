@@ -1,9 +1,0 @@
-line:
-  bot:
-    channel-token: ${CHANNEL_TOKEN}
-    channel-secret: ${CHANNEL_SECRET}
-
-spring:
-  datasource:
-    url: ${JDBC_DATABASE_URL:}
-    driver-class-name: org.postgresql.Driver
