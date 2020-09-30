@@ -61,7 +61,6 @@ public class LineBotApplication {
             }
             return new TextMessage(ret);
         }catch(Exception e){
-            System.out.println("ERRORERROR.");
             return new TextMessage("DB error!\n" + e.getMessage());
         }
     }
