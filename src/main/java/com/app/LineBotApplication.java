@@ -65,12 +65,24 @@ public class LineBotApplication {
         }
     }
 
+    private TextMessage deleteAll(){
+        try(Connection connection = dataSource.getConnection()){
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("TRUNCATE health");
+        }catch(Exception e){
+            return new TextMessage("DB error!\n" + e.getMessage());
+        }
+        return new TextMessage("deteled.");
+    }
+
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         String[] text = event.getMessage().getText().split("\n");
         if("out".equals(text[0])){
             return printAll();
+        }else if("del".equals(text[0])){
+            return deleteAll();
         }
         try{
             int bsl = Integer.parseInt(text[0]);    // blood sugar level
@@ -82,7 +94,7 @@ public class LineBotApplication {
                 statement.executeUpdate(String.format("INSERT INTO health VALUES (%d, %d, %d, now())", bsl, inj, car));
             }catch(Exception e){
                 System.out.println("ERRORERROR.");
-                return new TextMessage("DB error!\n" + dbUrl + "\n" + e.getMessage());
+                return new TextMessage("DB error!\n" + e.getMessage());
             }
         }catch(Exception e){
             return new TextMessage("invalid input!\n" + e.getMessage());
