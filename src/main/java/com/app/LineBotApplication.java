@@ -48,7 +48,7 @@ public class LineBotApplication {
             while(resultSet.next()){
                 sb.append(String.format("[%d] %s %3d:%3d:%3d\n",
                         index++,
-                        sdf.format(resultSet.getDate(4)),
+                        sdf.format(resultSet.getObject(4)),
                         resultSet.getInt(1),
                         resultSet.getInt(2),
                         resultSet.getInt(3)));
