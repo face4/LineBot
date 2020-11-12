@@ -14,7 +14,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Set up Maven
+        run: mvn -N io.takari:maven:wrapper
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - name: Test
-        run: mvn test
+        run: mvn test -B
